@@ -1,0 +1,13 @@
+# 설치된 npm 패키지
+node_modules/
+
+# 환경변수 및 비밀정보
+.env
+.env.*
+!.env.example
+
+# macOS 시스템 파일
+.DS_Store
+
+# 로그 파일
+*.log
