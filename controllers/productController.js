@@ -2,6 +2,7 @@ const Product = require("../models/product");
 const { create, assert } = require("superstruct");
 const GetProductsStruct = require("../structs/product/GetProductsStruct");
 const CreateProductStruct = require("../structs/product/CreateProductStruct");
+const ProductIdStruct = require("../structs/product/ProductIdStruct");
 
 // 전체 상품 목록 조회
 const getProducts = async (req, res) => {
@@ -40,7 +41,7 @@ const getProducts = async (req, res) => {
 
 // 상품 상세 페이지
 const getProduct = async (req, res) => {
-  assert(req.params, ProductIDStruct);
+  assert(req.params, ProductIdStruct);
 
   const product = await Product.findById(req.params.id);
   if (!product) {
