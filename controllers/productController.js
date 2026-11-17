@@ -1,6 +1,7 @@
 const Product = require("../models/product");
-const { create } = require("superstruct");
+const { create, assert } = require("superstruct");
 const GetProductsStruct = require("../structs/product/GetProductsStruct");
+const CreateProductStruct = require("../structs/product/CreateProductStruct");
 
 // 전체 상품 목록 조회
 const getProducts = async (req, res) => {
@@ -37,4 +38,34 @@ const getProducts = async (req, res) => {
   });
 };
 
-module.expors = { getProducts };
+// 상품 상세 페이지
+const getProduct = async (req, res) => {
+  assert(req.params, ProductIDStruct);
+
+  const product = await Product.findById(req.params.id);
+  if (!product) {
+    throw new NotFoundProduct("상품을 찾을 수 없습니다.");
+  }
+  res.status(200).json(product);
+};
+
+// 상품 등록
+const createProduct = async (req, res) => {
+  const { name, description, price, tags, images } = create(
+    req.body,
+    CreateProductStruct,
+  );
+
+  const product = await Product.create({
+    name,
+    description,
+    price,
+    tags,
+    images,
+  });
+  res.status(201).json(product);
+};
+
+//
+
+module.exports = { getProducts, createProduct };
