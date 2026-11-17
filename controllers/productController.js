@@ -95,4 +95,21 @@ const updateProduct = async (req, res) => {
   res.status(200).json(product);
 };
 
-module.exports = { getProducts, createProduct, getProduct, updateProduct };
+// 상품 삭제
+const deleteProduct = async (req, res) => {
+  assert(req.params, ProductIdStruct);
+
+  const result = await Product.deleteOne({ _id: req.params.id });
+  if (result.deletedCount !== 1) {
+    throw new NotFoundProduct("상품을 찾을 수 없습니다.");
+  }
+  res.status(204).end();
+};
+
+module.exports = {
+  getProducts,
+  createProduct,
+  getProduct,
+  updateProduct,
+  deleteProduct,
+};
