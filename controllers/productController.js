@@ -3,6 +3,8 @@ const { create, assert } = require("superstruct");
 const GetProductsStruct = require("../structs/product/GetProductsStruct");
 const CreateProductStruct = require("../structs/product/CreateProductStruct");
 const ProductIdStruct = require("../structs/product/ProductIdStruct");
+const NotFoundProduct = require("../exceptions/NotFoundProduct");
+const UpdateProductRequestStruct = require("../structs/product/UpdateProductRequestStruct");
 
 // 전체 상품 목록 조회
 const getProducts = async (req, res) => {
@@ -67,6 +69,30 @@ const createProduct = async (req, res) => {
   res.status(201).json(product);
 };
 
-//
+// 상품 수정
+const updateProduct = async (req, res) => {
+  assert(req.params, ProductIdStruct);
 
-module.exports = { getProducts, createProduct, getProduct };
+  const { name, description, price, tags, images } = create(
+    req.body,
+    UpdateProductRequestStruct,
+  );
+
+  const product = await Product.findById(req.params.id);
+  if (!product) {
+    throw new NotFoundProduct("상품을 찾을 수 없습니다.");
+  }
+
+  if (name) product.name = name;
+  if (description) product.description = description;
+  // 0은 falsy라서 무료나눔(0원)도 허용할 수 있게 작성
+  if (price !== undefined) product.price = price;
+  if (tags) product.tags = tags;
+  if (images) product.images = images;
+
+  await product.save();
+
+  res.status(200).json(product);
+};
+
+module.exports = { getProducts, createProduct, getProduct, updateProduct };

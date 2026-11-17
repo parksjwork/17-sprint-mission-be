@@ -1,6 +1,6 @@
 const HttpException = require("./HttpException");
 
-class NotFoundException extends HttpException {
+class NotFoundProduct extends HttpException {
   constructor(message) {
     super({
       status: 404,
@@ -10,4 +10,4 @@ class NotFoundException extends HttpException {
   }
 }
 
-module.exports = NotFoundException;
+module.exports = NotFoundProduct;
