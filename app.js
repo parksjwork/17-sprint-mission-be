@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const dbConnect = require("./config/dbConnect");
+const NotFoundException = require("./exception/NotFoundProduct");
+const errorHandler = require("./middlewares/errerHandler");
 
 const app = express();
 const port = 3000;
@@ -18,6 +20,14 @@ async function startServer() {
   await dbConnect();
 
   app.use("/items", require("./routes/productRoutes"));
+
+  // 등록되지 않은 경로로 요청이 들어올 경우
+  app.use((req, res) => {
+    throw new NotFoundException("요청한 경로가 없습니다.");
+  });
+
+  // 그 외 에러 처리: 반드시 라우터 뒤에 등록
+  app.use(errorHandler);
 
   app.listen(port, (err) => {
     if (err) throw err;

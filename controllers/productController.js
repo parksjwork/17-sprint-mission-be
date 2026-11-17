@@ -69,4 +69,4 @@ const createProduct = async (req, res) => {
 
 //
 
-module.exports = { getProducts, createProduct };
+module.exports = { getProducts, createProduct, getProduct };
