@@ -18,6 +18,16 @@ const productSchema = new mongoose.Schema(
     },
     // 태그
     tags: { type: [String], default: [] },
+    // 좋아요 수
+    favoriteCount: {
+      type: Number,
+      default: 0,
+    },
+    // 상품 이미지
+    images: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,
