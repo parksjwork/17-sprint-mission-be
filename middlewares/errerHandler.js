@@ -34,7 +34,9 @@ const errorHandler = (err, req, res, next) => {
   }
   // 그 외 에러는 500번대로 처리
   else if (!(err instanceof HttpException)) {
-    exception = new InternalServerErrorException(err.message);
+    exception = new InternalServerErrorException(
+      "서버 내부 오류가 발생했습니다.",
+    );
   }
 
   res.status(exception.status).json({
