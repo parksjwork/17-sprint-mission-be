@@ -17,9 +17,11 @@ const getProducts = async (req, res) => {
   const filters = {};
 
   if (keyword) {
+    // 특수문자를 이스케이프로 처리함
+    const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     filters.$or = [
-      { name: { $regex: keyword, $options: "i" } },
-      { description: { $regex: keyword, $options: "i" } },
+      { name: { $regex: escapedKeyword, $options: "i" } },
+      { description: { $regex: escapedKeyword, $options: "i" } },
     ];
   }
 

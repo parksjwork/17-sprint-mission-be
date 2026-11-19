@@ -28,6 +28,9 @@ const errorHandler = (err, req, res, next) => {
     exception = new BadRequestException(
       `이미 사용중인 ${Object.keys(err.keyValue)[0]}입니다.`,
     );
+  } else if (err.type === "entity.parse.failed") {
+    // JSON 파싱 실패(필드뒤에 ,가 없는 경우 등)
+    exception = new BadRequestException("잘못된 JSON 형식입니다.");
   }
   // 그 외 에러는 500번대로 처리
   else if (!(err instanceof HttpException)) {
