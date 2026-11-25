@@ -11,3 +11,12 @@ node_modules/
 
 # 로그 파일
 *.log
+
+# Prisma 자동 생성 코드
+/generated/prisma
+
+# Prisma 초기화 시 생성된 AI 도구용 파일
+.claude/skills/
+.windsurf/skills/
+.agents/skills/
+skills-lock.json

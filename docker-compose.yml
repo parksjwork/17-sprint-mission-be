@@ -1,0 +1,17 @@
+services:
+  postgres-db:
+    image: postgres:16
+    container_name: panda-market-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "1234"
+      POSTGRES_DB: panda_market
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - panda-market-db-data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  panda-market-db-data:

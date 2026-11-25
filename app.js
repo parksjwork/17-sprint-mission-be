@@ -1,9 +1,8 @@
-require("dotenv").config();
-const express = require("express");
-const dbConnect = require("./config/dbConnect");
+import "dotenv/config";
+import express from "express";
 const NotFoundProduct = require("./exceptions/NotFoundProduct.js");
 const errorHandler = require("./middlewares/errerHandler.js");
-const cors = require("cors");
+import cors from "cors";
 
 const app = express();
 const port = 3000;
@@ -20,9 +19,9 @@ app.use(express.json());
 
 async function startServer() {
   // DB를 연결 한 이후에 요청을 받기 시작하기 위해 await 사용
-  await dbConnect();
+  // await dbConnect();
 
-  app.use("/items", require("./routes/productRoutes"));
+  // app.use("/items", require("./routes/productRoutes"));
 
   // 등록되지 않은 경로로 요청이 들어올 경우
   app.use((req, res) => {
