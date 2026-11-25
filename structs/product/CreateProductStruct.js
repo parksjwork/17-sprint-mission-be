@@ -1,4 +1,4 @@
-const {
+import{
   object,
   string,
   number,
@@ -6,7 +6,7 @@ const {
   size,
   min,
   optional,
-} = require("superstruct");
+} from "superstruct";
 
 const CreateProductStruct = object({
   name: size(string(), 1, 10),
@@ -16,4 +16,4 @@ const CreateProductStruct = object({
   images: optional(array(string())),
 });
 
-module.exports = CreateProductStruct;
+export default CreateProductStruct;

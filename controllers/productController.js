@@ -1,46 +1,28 @@
-const Product = require("../models/product");
-const { create, assert } = require("superstruct");
-const GetProductsStruct = require("../structs/product/GetProductsStruct");
-const CreateProductStruct = require("../structs/product/CreateProductStruct");
-const ProductIdStruct = require("../structs/product/ProductIdStruct");
-const NotFoundProduct = require("../exceptions/NotFoundProduct");
-const UpdateProductRequestStruct = require("../structs/product/UpdateProductRequestStruct");
+import prisma from "../config/prisma.js";
+import { create, assert } from "superstruct";
+import GetProductsStruct from "../structs/product/GetProductsStruct.js";
+import CreateProductStruct from "../structs/product/CreateProductStruct.js";
+import ProductIdStruct from "../structs/product/ProductIdStruct.js";
+import NotFoundProduct from "../exceptions/NotFoundProduct.js";
+import UpdateProductRequestStruct from "../structs/product/UpdateProductRequestStruct.js";
+import * as productService from "../services/productService.js";
 
 // 전체 상품 목록 조회
 const getProducts = async (req, res) => {
+  // 유효성 검증
   const { page, pageSize, orderBy, keyword } = create(
     req.query,
     GetProductsStruct,
   );
 
-  // - 검색(keyword) -> 정렬(orderBy) -> 페이지(page) 순서로 처리
-  const filters = {};
-
-  if (keyword) {
-    // 특수문자를 이스케이프로 처리함
-    const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    filters.$or = [
-      { name: { $regex: escapedKeyword, $options: "i" } },
-      { description: { $regex: escapedKeyword, $options: "i" } },
-    ];
-  }
-
-  // mongoDB에서는 1,-1로 정렬 방향을 지정 (-1: 내림차순)
-  const sort = { createdAt: -1 };
-
-  // offset 방식을 이용한 페이지네이션
-  const products = await Product.find(filters)
-    .sort(sort)
-    .skip((page - 1) * pageSize)
-    .limit(pageSize);
-
-  // 글의 전체 갯수
-  const totalCount = await Product.countDocuments(filters);
-
-  res.status(200).json({
-    totalCount,
-    list: products,
+  const result = await productService.getProducts({
+    page,
+    pageSize,
+    orderBy,
+    keyword,
   });
+
+  res.status(200).json(result);
 };
 
 // 상품 상세 페이지
@@ -108,10 +90,4 @@ const deleteProduct = async (req, res) => {
   res.status(204).end();
 };
 
-module.exports = {
-  getProducts,
-  createProduct,
-  getProduct,
-  updateProduct,
-  deleteProduct,
-};
+export { getProducts, createProduct, getProduct, updateProduct, deleteProduct };

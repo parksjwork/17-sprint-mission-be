@@ -1,4 +1,4 @@
-const {
+import {
   object,
   string,
   integer,
@@ -7,7 +7,7 @@ const {
   enums,
   coerce,
   defaulted,
-} = require("superstruct");
+} from "superstruct";
 
 const GetProductsStruct = object({
   page: defaulted(
@@ -25,4 +25,4 @@ const GetProductsStruct = object({
   keyword: defaulted(string(), ""),
 });
 
-module.exports = GetProductsStruct;
+export default GetProductsStruct;

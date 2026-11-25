@@ -11,19 +11,19 @@ model article {
   id              Int               @id @default(autoincrement())
   title           String            @db.VarChar(200)
   content         String
-  created_at      DateTime          @default(now()) @db.Timestamptz(3)
-  updated_at      DateTime          @default(now()) @db.Timestamptz(3)
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamptz(3)
   article_comment article_comment[]
 
-  @@index([created_at])
+  @@index([createdAt])
 }
 
 model article_comment {
   id         Int      @id @default(autoincrement())
   article_id Int
   content    String
-  created_at DateTime @default(now()) @db.Timestamptz(3)
-  updated_at DateTime @default(now()) @db.Timestamptz(3)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamptz(3)
   article    article  @relation(fields: [article_id], references: [id], onDelete: Cascade)
 
   @@index([article_id, id])
@@ -35,20 +35,20 @@ model product {
   name            String            @db.VarChar(10)
   price           Int
   description     String
-  created_at      DateTime          @default(now()) @db.Timestamptz(3)
-  updated_at      DateTime          @default(now()) @db.Timestamptz(3)
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime          @default(now()) @map("updated_at") @db.Timestamptz(3)
   product_comment product_comment[]
   product_to_tag  product_to_tag[]
 
-  @@index([created_at])
+  @@index([createdAt])
 }
 
 model product_comment {
   id         Int      @id @default(autoincrement())
   product_id Int
   content    String
-  created_at DateTime @default(now()) @db.Timestamptz(3)
-  updated_at DateTime @default(now()) @db.Timestamptz(3)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamptz(3)
   product    product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
   @@index([product_id, id])
@@ -67,6 +67,6 @@ model product_to_tag {
 model tag {
   id             Int              @id @default(autoincrement())
   name           String           @unique @db.VarChar(5)
-  created_at     DateTime         @default(now()) @db.Timestamptz(3)
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
   product_to_tag product_to_tag[]
 }
