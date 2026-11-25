@@ -1,6 +1,4 @@
-// 사용자 정의 예외
-
-const HttpException = require("./HttpException");
+import HttpException from "./HttpException.js";
 
 class BadRequestException extends HttpException {
   constructor(message) {
@@ -12,4 +10,4 @@ class BadRequestException extends HttpException {
   }
 }
 
-module.exports = BadRequestException;
+export default BadRequestException;

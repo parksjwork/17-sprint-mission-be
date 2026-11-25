@@ -1,12 +1,16 @@
 import "dotenv/config";
 import express from "express";
-const NotFoundProduct = require("./exceptions/NotFoundProduct.js");
-const errorHandler = require("./middlewares/errerHandler.js");
+import NotFoundProduct from "./exceptions/NotFoundProduct.js";
+import errorHandler from "./middlewares/errerHandler.js";
 import cors from "cors";
+import prisma from "./config/prisma.js";
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
+// 개발 환경에서는 모든 출처를 허용하는 것이 편하다고 강사님께 이야기 들었고,
+// 배포 전 화이트리스트를 적용하여 허용할 출처를 제한할 것을 멘토님께 리뷰 받았음
+// 추후에 이 부분 다시 확인하여 배포 전에는 화이트리스트 작성할 것
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -19,7 +23,7 @@ app.use(express.json());
 
 async function startServer() {
   // DB를 연결 한 이후에 요청을 받기 시작하기 위해 await 사용
-  // await dbConnect();
+  await prisma.$connect();
 
   // app.use("/items", require("./routes/productRoutes"));
 

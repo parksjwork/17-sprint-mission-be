@@ -1,4 +1,4 @@
-const HttpException = require("./HttpException");
+import HttpException from "./HttpException.js";
 
 class NotFoundProduct extends HttpException {
   constructor(message) {
@@ -10,4 +10,4 @@ class NotFoundProduct extends HttpException {
   }
 }
 
-module.exports = NotFoundProduct;
+export default NotFoundProduct;
