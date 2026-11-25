@@ -1,0 +1,8 @@
+import express from "express";
+
+const router = express.Router();
+
+router.route("/").post(createArticle); //.get(getArticles)
+// router.route("/:id").get(getArticle).patch(updateArticle).delete(deleteArticle);
+
+export default router;

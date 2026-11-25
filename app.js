@@ -4,6 +4,7 @@ import NotFoundProduct from "./exceptions/NotFoundProduct.js";
 import errorHandler from "./middlewares/errerHandler.js";
 import cors from "cors";
 import prisma from "./config/prisma.js";
+import articleRouter from "./routes/articleRoutes.js";
 
 const app = express();
 const port = 4000;
@@ -26,6 +27,7 @@ async function startServer() {
   await prisma.$connect();
 
   // app.use("/items", require("./routes/productRoutes"));
+  app.use("/articles", articleRouter);
 
   // 등록되지 않은 경로로 요청이 들어올 경우
   app.use((req, res) => {
