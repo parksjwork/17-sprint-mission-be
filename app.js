@@ -5,6 +5,7 @@ import errorHandler from "./middlewares/errerHandler.js";
 import cors from "cors";
 import prisma from "./config/prisma.js";
 import articleRouter from "./routes/articleRoutes.js";
+import articleCommentRouter from "./routes/articleCommentRoutes.js";
 
 const app = express();
 const port = 4000;
@@ -28,6 +29,7 @@ async function startServer() {
 
   // app.use("/items", require("./routes/productRoutes"));
   app.use("/articles", articleRouter);
+  app.use("/articles/:id/comments", articleCommentRouter);
 
   // 등록되지 않은 경로로 요청이 들어올 경우
   app.use((req, res) => {
