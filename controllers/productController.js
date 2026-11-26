@@ -3,7 +3,7 @@ import { create, assert } from "superstruct";
 import GetProductsStruct from "../structs/product/GetProductsStruct.js";
 import CreateProductStruct from "../structs/product/CreateProductStruct.js";
 import ProductIdStruct from "../structs/product/ProductIdStruct.js";
-import NotFoundProduct from "../exceptions/NotFoundProduct.js";
+import NotFoundExeption from "../exceptions/NotFoundExeption.js";
 import UpdateProductRequestStruct from "../structs/product/UpdateProductRequestStruct.js";
 import * as productService from "../services/productService.js";
 
@@ -31,7 +31,7 @@ const getProduct = async (req, res) => {
 
   const product = await Product.findById(req.params.id);
   if (!product) {
-    throw new NotFoundProduct("상품을 찾을 수 없습니다.");
+    throw new NotFoundExeption("상품을 찾을 수 없습니다.");
   }
   res.status(200).json(product);
 };
@@ -64,7 +64,7 @@ const updateProduct = async (req, res) => {
 
   const product = await Product.findById(req.params.id);
   if (!product) {
-    throw new NotFoundProduct("상품을 찾을 수 없습니다.");
+    throw new NotFoundExeption("상품을 찾을 수 없습니다.");
   }
 
   if (name) product.name = name;
@@ -85,7 +85,7 @@ const deleteProduct = async (req, res) => {
 
   const result = await Product.deleteOne({ _id: req.params.id });
   if (result.deletedCount !== 1) {
-    throw new NotFoundProduct("상품을 찾을 수 없습니다.");
+    throw new NotFoundExeption("상품을 찾을 수 없습니다.");
   }
   res.status(204).end();
 };

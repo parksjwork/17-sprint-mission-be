@@ -1,6 +1,6 @@
 import HttpException from "./HttpException.js";
 
-class NotFoundProduct extends HttpException {
+class NotFoundExceptioon extends HttpException {
   constructor(message) {
     super({
       status: 404,
@@ -10,4 +10,4 @@ class NotFoundProduct extends HttpException {
   }
 }
 
-export default NotFoundProduct;
+export default NotFoundExceptioon;

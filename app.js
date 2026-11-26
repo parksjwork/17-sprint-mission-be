@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express from "express";
-import NotFoundProduct from "./exceptions/NotFoundProduct.js";
+import NotFoundException from "./exceptions/NotFoundException.js";
 import errorHandler from "./middlewares/errerHandler.js";
 import cors from "cors";
 import prisma from "./config/prisma.js";
@@ -31,7 +31,7 @@ async function startServer() {
 
   // 등록되지 않은 경로로 요청이 들어올 경우
   app.use((req, res) => {
-    throw new NotFoundProduct("요청한 경로가 없습니다.");
+    throw new NotFoundException("요청한 경로가 없습니다.");
   });
 
   // 그 외 에러 처리: 반드시 라우터 뒤에 등록
