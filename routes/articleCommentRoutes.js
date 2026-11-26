@@ -1,8 +1,11 @@
 import express from "express";
-import { updateArticleComment } from "../controllers/articleCommentController.js";
+import {
+  deleteArticleComment,
+  updateArticleComment,
+} from "../controllers/articleCommentController.js";
 
 const router = express.Router();
 
-router.route("/:id").patch(updateArticleComment);
+router.route("/:id").patch(updateArticleComment).delete(deleteArticleComment);
 
 export default router;

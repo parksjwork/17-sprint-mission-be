@@ -40,4 +40,12 @@ const updateArticleComment = async (req, res) => {
   res.status(200).json(comment);
 };
 
-export { createArticleComment, getArticleComments, updateArticleComment };
+const deleteArticleComment = async (req, res) => {
+  const { id } = create(req.params, ArticleCommentIdStruct);
+
+  await articleCommentService.deleteArticleComment(id);
+
+  res.status(204).end();
+};
+
+export { createArticleComment, getArticleComments, updateArticleComment, deleteArticleComment };
