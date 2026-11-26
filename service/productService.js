@@ -1,26 +1,32 @@
 import prisma from "../config/prisma.js";
+import NotFoundException from "../exceptions/NotFoundException.js";
 
 const getProducts = async ({ page, pageSize, orderBy, keyword }) => {
-  // - 검색(keyword) -> 정렬(orderBy) -> 페이지(page) 순서로 처리
+  // 검색 조건 설정
   const filters = {};
 
   if (keyword) {
-    // 특수문자를 이스케이프로 처리는 추후에
     filters.OR = [
       { name: { contains: keyword, mode: "insensitive" } },
       { description: { contains: keyword, mode: "insensitive" } },
     ];
   }
 
-  // 페이지네이션
+  // 상품 목록 조회
   const products = await prisma.product.findMany({
     where: filters,
     orderBy: { createdAt: "desc" },
     skip: (page - 1) * pageSize,
     take: pageSize,
+    select: {
+      id: true,
+      name: true,
+      price: true,
+      createdAt: true,
+    },
   });
 
-  // 글의 전체 갯수
+  // 검색 조건에 해당하는 전체 상품 개수
   const totalCount = await prisma.product.count({
     where: filters,
   });
@@ -31,4 +37,25 @@ const getProducts = async ({ page, pageSize, orderBy, keyword }) => {
   };
 };
 
-export { getProducts };
+const getProduct = async ({ id }) => {
+  const product = await prisma.product.findUnique({
+    where: { id },
+    include: {
+      productToTag: { select: { tag: { select: { name: true } } } },
+    },
+  });
+  if (!product) {
+    throw new NotFoundException("상품을 찾을 수 없습니다.");
+  }
+
+  return {
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    description: product.description,
+    createdAt: product.createdAt,
+    tags: product.productToTag.map((tag) => tag.tag.name),
+  };
+};
+
+export { getProducts, getProduct };

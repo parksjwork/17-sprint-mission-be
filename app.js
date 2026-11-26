@@ -4,6 +4,7 @@ import NotFoundException from "./exceptions/NotFoundException.js";
 import errorHandler from "./middlewares/errerHandler.js";
 import cors from "cors";
 import prisma from "./config/prisma.js";
+import productRouter from "./routes/productRoutes.js";
 import articleRouter from "./routes/articleRoutes.js";
 import articleCommentRouter from "./routes/articleCommentRoutes.js";
 
@@ -27,22 +28,20 @@ async function startServer() {
   // DB를 연결 한 이후에 요청을 받기 시작하기 위해 await 사용
   await prisma.$connect();
 
-  // app.use("/items", require("./routes/productRoutes"));
+  app.use("/items", productRouter);
   app.use("/articles", articleRouter);
   app.use("/article_comments", articleCommentRouter);
 
-  // 등록되지 않은 경로로 요청이 들어올 경우
   app.use((req, res) => {
     throw new NotFoundException("요청한 경로가 없습니다.");
   });
 
-  // 그 외 에러 처리: 반드시 라우터 뒤에 등록
   app.use(errorHandler);
 
   app.listen(port, (err) => {
     if (err) throw err;
     console.log(`서버 실행 중: http://localhost:${port}`);
   });
-} 
+}
 
 startServer();

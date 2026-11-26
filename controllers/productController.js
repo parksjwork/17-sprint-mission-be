@@ -1,11 +1,10 @@
-import prisma from "../config/prisma.js";
 import { create, assert } from "superstruct";
 import GetProductsStruct from "../structs/product/GetProductsStruct.js";
 import CreateProductStruct from "../structs/product/CreateProductStruct.js";
 import ProductIdStruct from "../structs/product/ProductIdStruct.js";
-import NotFoundExeption from "../exceptions/NotFoundExeption.js";
+import NotFoundException from "../exceptions/NotFoundException.js";
 import UpdateProductRequestStruct from "../structs/product/UpdateProductRequestStruct.js";
-import * as productService from "../services/productService.js";
+import * as productService from "../service/productService.js";
 
 // 전체 상품 목록 조회
 const getProducts = async (req, res) => {
@@ -27,12 +26,10 @@ const getProducts = async (req, res) => {
 
 // 상품 상세 페이지
 const getProduct = async (req, res) => {
-  assert(req.params, ProductIdStruct);
+  const { id } = create(req.params, ProductIdStruct);
 
-  const product = await Product.findById(req.params.id);
-  if (!product) {
-    throw new NotFoundExeption("상품을 찾을 수 없습니다.");
-  }
+  const product = await productService.getProduct({ id });
+
   res.status(200).json(product);
 };
 
