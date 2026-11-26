@@ -50,4 +50,18 @@ const getArticleComments = async (articleId, { cursor, limit }) => {
   };
 };
 
-export { createArticleComment, getArticleComments };
+const updateArticleComment = async (id, { content }) => {
+  const comment = await prisma.articleComment.findUnique({ where: { id } });
+  if (!comment) {
+    throw new NotFoundException("댓글을 찾을 수 없습니다.");
+  }
+
+  const newComment = await prisma.articleComment.update({
+    where: { id },
+    data: { content, updatedAt: new Date() },
+  });
+
+  return newComment;
+};
+
+export { createArticleComment, getArticleComments, updateArticleComment };

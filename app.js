@@ -29,7 +29,7 @@ async function startServer() {
 
   // app.use("/items", require("./routes/productRoutes"));
   app.use("/articles", articleRouter);
-  app.use("/articles/:id/comments", articleCommentRouter);
+  app.use("/article_comments", articleCommentRouter);
 
   // 등록되지 않은 경로로 요청이 들어올 경우
   app.use((req, res) => {
