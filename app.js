@@ -43,6 +43,6 @@ async function startServer() {
     if (err) throw err;
     console.log(`서버 실행 중: http://localhost:${port}`);
   });
-}
+} 
 
 startServer();

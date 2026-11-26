@@ -58,6 +58,7 @@ const getArticles = async ({ page, pageSize, orderBy, keyword }) => {
 const getArticle = async ({ id }) => {
   const article = await prisma.article.findUnique({
     where: { id },
+    omit: { updatedAt: true },
   });
 
   if (!article) {

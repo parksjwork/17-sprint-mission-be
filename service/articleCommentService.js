@@ -32,6 +32,7 @@ const getArticleComments = async (articleId, { cursor, limit }) => {
     orderBy: [{ createdAt: "asc" }, { id: "asc" }],
     take: limit + 1,
     ...(cursor && { cursor: { id: cursor }, skip: 1 }),
+    omit: { articleId: true, updatedAt: true },
   });
 
   // 다음 페이지가 있는지 판단
