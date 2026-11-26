@@ -1,5 +1,5 @@
-import { create } from "superstruct";
 import prisma from "../config/prisma.js";
+import NotFoundException from "../exceptions/NotFoundException.js";
 
 const createArticle = async ({ title, content }) => {
   const article = await prisma.article.create({
@@ -67,4 +67,24 @@ const getArticle = async ({ id }) => {
   return article;
 };
 
-export { createArticle, getArticles, getArticle };
+const updateArticle = async ({ id, title, content }) => {
+  const article = await prisma.article.findUnique({ where: { id } });
+
+  if (!article) {
+    throw new NotFoundException("게시글을 찾을 수 없습니다.");
+  }
+
+  const data = {};
+  if (title) data.title = title;
+  if (content) data.content = content;
+  data.updatedAt = new Date();
+
+  const newArticle = await prisma.article.update({
+    where: { id },
+    data,
+  });
+
+  return newArticle;
+};
+
+export { createArticle, getArticles, getArticle, updateArticle };

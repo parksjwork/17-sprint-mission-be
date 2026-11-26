@@ -3,6 +3,7 @@ import CreateArticleStruct from "../structs/article/CreateArticleStruct.js";
 import * as articleService from "../service/articleService.js";
 import GetArticlesStruct from "../structs/article/GetArticlesStruct.js";
 import ArticleIdStruct from "../structs/article/ArticleIdStruct.js";
+import UpdateArticleStruct from "../structs/article/UpdateArticleStruct.js";
 
 const createArticle = async (req, res) => {
   const { title, content } = create(req.body, CreateArticleStruct);
@@ -36,4 +37,13 @@ const getArticle = async (req, res) => {
   res.status(200).json(article);
 };
 
-export { createArticle, getArticles, getArticle };
+const updateArticle = async (req, res) => {
+  const { id } = create(req.params, ArticleIdStruct);
+  const { title, content } = create(req.body, UpdateArticleStruct);
+
+  const article = await articleService.updateArticle({ id, title, content });
+
+  res.status(200).json(article);
+};
+
+export { createArticle, getArticles, getArticle, updateArticle };
