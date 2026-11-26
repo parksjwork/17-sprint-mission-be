@@ -87,4 +87,13 @@ const updateArticle = async ({ id, title, content }) => {
   return newArticle;
 };
 
-export { createArticle, getArticles, getArticle, updateArticle };
+const deleteArticle = async ({ id }) => {
+  const article = await prisma.article.findUnique({ where: { id } });
+  if (!article) {
+    throw new NotFoundException("게시글을 찾을 수 없습니다.");
+  }
+
+  await prisma.article.delete({ where: { id } });
+};
+
+export { createArticle, getArticles, getArticle, updateArticle, deleteArticle };

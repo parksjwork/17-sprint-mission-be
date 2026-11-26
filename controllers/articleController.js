@@ -46,4 +46,11 @@ const updateArticle = async (req, res) => {
   res.status(200).json(article);
 };
 
-export { createArticle, getArticles, getArticle, updateArticle };
+const deleteArticle = async (req, res) => {
+  const { id } = create(req.params, ArticleIdStruct);
+  await articleService.deleteArticle({id});
+
+  res.status(204).end();
+};
+
+export { createArticle, getArticles, getArticle, updateArticle, deleteArticle };
