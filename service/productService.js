@@ -58,4 +58,103 @@ const getProduct = async ({ id }) => {
   };
 };
 
-export { getProducts, getProduct };
+const createProduct = async ({ name, price, description, tags }) => {
+  const product = await prisma.product.create({
+    data: {
+      name,
+      price,
+      description,
+      productToTag: {
+        create: tags.map((name) => ({
+          tag: {
+            connectOrCreate: {
+              where: { name },
+              create: { name },
+            },
+          },
+        })),
+      },
+    },
+    include: {
+      productToTag: {
+        select: {
+          tag: {
+            select: { name: true },
+          },
+        },
+      },
+    },
+  });
+
+  return {
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    description: product.description,
+    tags: product.productToTag.map((tag) => tag.tag.name),
+  };
+};
+
+const updateProduct = async ({ id, name, price, description, tags }) => {
+  const product = await prisma.product.findUnique({ where: { id } });
+  if (!product) {
+    throw new NotFoundException("상품을 찾을 수 없습니다.");
+  }
+
+  const data = {};
+  if (name) data.name = name;
+  // 0은 falsy라서 무료나눔(0원)도 허용할 수 있게 작성
+  if (price !== undefined) data.price = price;
+  if (description) data.description = description;
+
+  if (tags !== undefined) {
+    const tagList = [...new Set(tags)];
+    data.productToTag = {
+      deleteMany: {},
+      create: tagList.map((name) => ({
+        tag: {
+          connectOrCreate: {
+            where: { name },
+            create: { name },
+          },
+        },
+      })),
+    };
+  }
+
+  const newProduct = await prisma.product.update({
+    where: { id },
+    data,
+    include: {
+      productToTag: {
+        select: {
+          tag: {
+            select: { name: true },
+          },
+        },
+      },
+    },
+  });
+
+  return {
+    id: newProduct.id,
+    name: newProduct.name,
+    price: newProduct.price,
+    description: newProduct.description,
+    tags: newProduct.productToTag.map((tag) => tag.tag.name),
+    updatedAt: newProduct.updatedAt,
+  };
+};
+
+const deleteProduct = async ({ id }) => {
+  const product = await prisma.product.findUnique({
+    where: { id },
+  });
+  if (!product) {
+    throw new NotFoundException("상품을 찾을 수 없습니다.");
+  }
+
+  await prisma.product.delete({ where: { id } });
+};
+
+export { getProducts, getProduct, createProduct, updateProduct, deleteProduct };

@@ -1,8 +1,6 @@
-import { create, assert } from "superstruct";
 import GetProductsStruct from "../structs/product/GetProductsStruct.js";
 import CreateProductStruct from "../structs/product/CreateProductStruct.js";
 import ProductIdStruct from "../structs/product/ProductIdStruct.js";
-import NotFoundException from "../exceptions/NotFoundException.js";
 import UpdateProductRequestStruct from "../structs/product/UpdateProductRequestStruct.js";
 import * as productService from "../service/productService.js";
 
@@ -35,56 +33,46 @@ const getProduct = async (req, res) => {
 
 // 상품 등록
 const createProduct = async (req, res) => {
-  const { name, description, price, tags, images } = create(
+  const { name, description, price, tags } = create(
     req.body,
     CreateProductStruct,
   );
 
-  const product = await Product.create({
+  const product = await productService.createProduct({
     name,
-    description,
     price,
+    description,
     tags,
-    images,
   });
   res.status(201).json(product);
 };
 
 // 상품 수정
 const updateProduct = async (req, res) => {
-  assert(req.params, ProductIdStruct);
+  const { id } = create(req.params, ProductIdStruct);
 
-  const { name, description, price, tags, images } = create(
+  const { name, description, price, tags } = create(
     req.body,
     UpdateProductRequestStruct,
   );
 
-  const product = await Product.findById(req.params.id);
-  if (!product) {
-    throw new NotFoundExeption("상품을 찾을 수 없습니다.");
-  }
-
-  if (name) product.name = name;
-  if (description) product.description = description;
-  // 0은 falsy라서 무료나눔(0원)도 허용할 수 있게 작성
-  if (price !== undefined) product.price = price;
-  if (tags) product.tags = tags;
-  if (images) product.images = images;
-
-  await product.save();
+  const product = await productService.updateProduct({
+    id,
+    name,
+    description,
+    price,
+    tags,
+  });
 
   res.status(200).json(product);
 };
 
 // 상품 삭제
 const deleteProduct = async (req, res) => {
-  assert(req.params, ProductIdStruct);
+  const { id } = create(req.params, ProductIdStruct);
 
-  const result = await Product.deleteOne({ _id: req.params.id });
-  if (result.deletedCount !== 1) {
-    throw new NotFoundExeption("상품을 찾을 수 없습니다.");
-  }
+  await productService.deleteProduct({ id });
+
   res.status(204).end();
 };
-
 export { getProducts, createProduct, getProduct, updateProduct, deleteProduct };
