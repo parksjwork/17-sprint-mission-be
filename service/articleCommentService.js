@@ -8,9 +8,11 @@ const createArticleComment = async ({ articleId, content }) => {
   }
 
   const comment = await prisma.articleComment.create({
-    data: { content, articleId },
+    data: {
+      articleId,
+      content,
+    },
   });
-
   return comment;
 };
 

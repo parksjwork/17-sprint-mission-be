@@ -9,10 +9,9 @@ const createArticleComment = async (req, res) => {
   const { content } = create(req.body, CreateArticleCommentStruct);
 
   const comment = await articleCommentService.createArticleComment({
-    id,
+    articleId: id,
     content,
   });
-
   res.status(201).json(comment);
 };
 
