@@ -60,13 +60,14 @@ const getProduct = async ({ id }) => {
 };
 
 const createProduct = async ({ name, price, description, tags }) => {
+  const tagList = [...new Set(tags)];
   const product = await prisma.product.create({
     data: {
       name,
       price,
       description,
       productToTag: {
-        create: tags.map((name) => ({
+        create: tagList.map((name) => ({
           tag: {
             connectOrCreate: {
               where: { name },
@@ -122,6 +123,8 @@ const updateProduct = async ({ id, name, price, description, tags }) => {
       })),
     };
   }
+
+  data.updatedAt = new Date();
 
   const newProduct = await prisma.product.update({
     where: { id },

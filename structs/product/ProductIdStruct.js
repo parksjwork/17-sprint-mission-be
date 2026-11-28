@@ -1,7 +1,7 @@
-import { object, string, pattern } from"superstruct";
+import { object, coerce, integer, string, min } from "superstruct";
 
 const ProductIdStruct = object({
-  id: pattern(string(), /^[0-9a-fA-F]{24}$/),
+  id: coerce(min(integer(), 1), string(), (value) => Number(value)),
 });
 
 export default ProductIdStruct;
