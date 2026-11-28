@@ -7,6 +7,7 @@ import prisma from "./config/prisma.js";
 import productRouter from "./routes/productRoutes.js";
 import articleRouter from "./routes/articleRoutes.js";
 import articleCommentRouter from "./routes/articleCommentRoutes.js";
+import productCommentRouter from "./routes/productCommentRoutes.js";
 
 const app = express();
 const port = 4000;
@@ -31,6 +32,7 @@ async function startServer() {
   app.use("/items", productRouter);
   app.use("/articles", articleRouter);
   app.use("/article_comments", articleCommentRouter);
+  app.use("/product_comments", productCommentRouter);
 
   app.use((req, res) => {
     throw new NotFoundException("요청한 경로가 없습니다.");

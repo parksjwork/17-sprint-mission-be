@@ -1,6 +1,7 @@
 import prisma from "../config/prisma.js";
 import NotFoundException from "../exceptions/NotFoundException.js";
 
+
 const getProducts = async ({ page, pageSize, orderBy, keyword }) => {
   // 검색 조건 설정
   const filters = {};

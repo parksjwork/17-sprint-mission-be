@@ -3,6 +3,7 @@ import CreateProductStruct from "../structs/product/CreateProductStruct.js";
 import ProductIdStruct from "../structs/product/ProductIdStruct.js";
 import UpdateProductRequestStruct from "../structs/product/UpdateProductRequestStruct.js";
 import * as productService from "../service/productService.js";
+import { create } from "superstruct";
 
 // 전체 상품 목록 조회
 const getProducts = async (req, res) => {
